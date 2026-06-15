@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
+
+class AddCategoryDialog extends StatelessWidget {
+  const AddCategoryDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      title: const Center(
+        child: Text(
+          'NOVA CATEGORIA',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+        ),
+      ),
+      content: Column(
+        mainAxisSize:
+            MainAxisSize.min, // Faz o pop-up abraçar o conteúdo sem esticar
+        children: [
+          // Botão de Foto
+          Container(
+            width: 100.0,
+            height: 100.0,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(12.0),
+              border: Border.all(color: Colors.grey.withOpacity(0.5)),
+            ),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.add_a_photo, color: Colors.grey, size: 32.0),
+                SizedBox(height: 4.0),
+                Text(
+                  'FOTO',
+                  style: TextStyle(
+                    fontSize: 10.0,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16.0),
+
+          // Campo de Texto do Nome
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'NOME DA CATEGORIA',
+              hintStyle: TextStyle(
+                color: Colors.grey.withOpacity(0.5),
+                fontSize: 14.0,
+              ),
+              filled: true,
+              fillColor: Colors.grey[100],
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        ],
+      ),
+      actionsAlignment: MainAxisAlignment.spaceEvenly,
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context), // Fecha o pop-up
+          child: const Text(
+            'CANCELAR',
+            style: TextStyle(
+              color: AppColors.danger,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          onPressed: () {
+            print("Categoria salva!");
+            Navigator.pop(context); // Fecha o pop-up
+          },
+          child: const Text(
+            'SALVAR',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
+    );
+  }
+}

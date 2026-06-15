@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "167364114932",
+    "project_id": "napontadolapis-4311a",
+    "storage_bucket": "napontadolapis-4311a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:167364114932:android:12dac9b3be22ab6a7421a1",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfPHrcgKlUfyrzzplge9ArBMicJcb460M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
