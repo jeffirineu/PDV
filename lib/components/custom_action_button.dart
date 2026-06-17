@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart'; // Puxando o nosso azul padronizado
+import '../theme/app_colors.dart'; // Importação do catálogo de cores da aplicação
 
 class CustomActionButton extends StatelessWidget {
   final String label;
@@ -16,7 +16,7 @@ class CustomActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity, // Ocupa a largura toda da tela
+      width: double.infinity, // Expande o componente para ocupar toda a largura disponível do contêiner pai
       height: 50.0,
       child: ElevatedButton.icon(
         onPressed: onPressed,
@@ -26,7 +26,7 @@ class CustomActionButton extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 17.0, // Fonte aumentada em 20%
+            fontSize: 17.0, // Definição da escala tipográfica do rótulo
           ),
         ),
         style: ElevatedButton.styleFrom(

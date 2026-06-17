@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
-// O "implements PreferredSizeWidget" é uma regra obrigatória do Flutter
-// sempre que você cria uma AppBar personalizada do zero.
+// A interface PreferredSizeWidget é requerida estruturalmente para a implementação de componentes AppBar customizados
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final int?
-  tableNumber; // O "?" significa que pode ser nulo (ou seja, não ter mesa)
-  final bool showBackButton; // Para a Home não ter a seta de voltar
+  final int? tableNumber; // Identificador numérico da mesa (anulável para contextos de navegação global)
+  final bool showBackButton; // Flag de controle para exibição do componente de navegação reversa
 
   const CustomAppBar({
     super.key,
@@ -29,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.white,
       iconTheme: const IconThemeData(color: Colors.black),
 
-      // Lógica da Seta de Voltar: Se for true, mostra a seta. Se false, não mostra nada.
+      // Controle de roteamento reverso acionado pelo parâmetro showBackButton
       leading: showBackButton
           ? IconButton(
               icon: const Icon(Icons.arrow_back),
@@ -37,7 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
 
-      // O Título Dinâmico (CARDÁPIO, MESAS, VENDAS...)
+      // Renderização do título dinâmico da tela de contexto
       title: Text(
         title,
         style: const TextStyle(
@@ -47,12 +45,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       centerTitle: true,
 
-      // Lógica da Direita (Mesa vs Perfil)
+      // Renderização condicional do painel de ações superior (Action Panel)
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: Center(
-            // Se tableNumber for diferente de nulo, mostra o Círculo da Mesa
+            // Avaliação de estado para exibição do badge numérico da mesa
             child: tableNumber != null
                 ? Container(
                     width: 40.0,
@@ -62,7 +60,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.blueAccent.withOpacity(0.4),
+                          color: Colors.blueAccent.withValues(alpha: 0.4),
                           blurRadius: 8.0,
                           offset: const Offset(0, 2),
                         ),
@@ -79,9 +77,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                   )
-                // Se tableNumber for nulo, mostra a Foto de Perfil
+                // Fallback para exibição do avatar do usuário em telas de escopo global
                 : GestureDetector(
-                    onTap: () => print("Perfil clicado!"),
+                    onTap: () => print("Chamada à rotina de perfil acionada"),
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -91,7 +89,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                         ),
                       ),
                       child: const CircleAvatar(
-                        radius: 18, // Ajustado ligeiramente para caber melhor
+                        radius: 18.0, 
                         backgroundImage: NetworkImage(
                           'https://picsum.photos/200',
                         ),

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../theme/app_colors.dart';
 import '../components/custom_app_bar.dart';
 import '../components/custom_search_bar.dart';
-import '../components/custom_category_bar.dart'; // Import da barra
+import '../components/custom_category_bar.dart';
 import '../components/custom_order_item.dart';
 import '../components/order_summary.dart';
 
@@ -17,12 +17,14 @@ class NewOrderScreen extends StatefulWidget {
 }
 
 class _NewOrderScreenState extends State<NewOrderScreen> {
+  // Estrutura de dados para armazenamento temporário dos itens do pedido
   Map<String, Map<String, dynamic>> carrinho = {};
   bool _isSaving = false;
 
   String _categoriaSelecionada = 'Todos';
   String _pesquisa = '';
 
+  // Propriedade calculada para totalização de itens na estrutura do carrinho
   int get totalItensCarrinho {
     int total = 0;
     carrinho.forEach((key, item) {
@@ -31,6 +33,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
     return total;
   }
 
+  // Rotina assíncrona de persistência de dados em lote no Firestore
   Future<void> _confirmarPedido() async {
     if (carrinho.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -49,6 +52,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
           .collection('mesas')
           .doc(widget.numeroDaMesa.toString());
 
+      // Iteração sobre os itens do carrinho para composição das coleções dependentes
       carrinho.forEach((idProduto, dadosProduto) {
         var novoItemRef = mesaRef.collection('pedidos').doc();
         batch.set(novoItemRef, {
@@ -62,6 +66,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
         });
       });
 
+      // Atualização do estado do documento principal da mesa
       batch.set(mesaRef, {
         'numero': widget.numeroDaMesa,
         'estaOcupada': true,
@@ -106,7 +111,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // BARRA DE PESQUISA
+                    // Campo de pesquisa textual para filtragem local
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
                       child: CustomSearchBar(
@@ -116,11 +121,10 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                       ),
                     ),
 
-                    // BARRA DE CATEGORIAS COM TRAVA DE SEGURANÇA SELECIONADA
+                    // Componente de seleção de categoria (modo de visualização estrito)
                     CustomCategoryBar(
                       categoriaSelecionada: _categoriaSelecionada,
-                      showActions:
-                          false, // <-- DESATIVA OS BOTÕES E O CLIQUE LONGO AQUI!
+                      showActions: false, 
                       onCategorySelected: (categoria) {
                         setState(() {
                           _categoriaSelecionada = categoria;
@@ -128,9 +132,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                       },
                     ),
 
-                    // =======================================================
-                    // O TÍTULO DA CATEGORIA ENTRE A BARRA E A LISTA DE ITENS
-                    // =======================================================
+                    // Rótulo de identificação da categoria em exibição
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 12.0),
                       child: Text(
@@ -138,7 +140,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black.withOpacity(0.4),
+                          color: Colors.black.withValues(alpha: 0.4),
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -147,7 +149,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                 ),
               ),
 
-              // LISTA DE PRODUTOS FILTRADOS
+              // Provedor de fluxo de dados em tempo real da base de produtos
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('produtos')
@@ -186,6 +188,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
 
                   var produtosBrutos = snapshot.data!.docs;
 
+                  // Aplicação de filtros lógicos baseados na seleção do usuário
                   if (_categoriaSelecionada != 'Todos') {
                     produtosBrutos = produtosBrutos.where((doc) {
                       var dados = doc.data() as Map<String, dynamic>;
@@ -203,6 +206,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                     }).toList();
                   }
 
+                  // Ordenação alfabética da listagem resultante
                   produtosBrutos.sort((a, b) {
                     var nomeA =
                         ((a.data() as Map<String, dynamic>)['nome'] ?? '')
@@ -231,6 +235,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                     );
                   }
 
+                  // Renderização da lista de elementos gráficos integrados aos controladores de estado
                   return SliverPadding(
                     padding: const EdgeInsets.only(
                       left: 16.0,
@@ -246,11 +251,9 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                         String nome = dados['nome'] ?? 'Sem nome';
                         double preco = (dados['preco'] ?? 0.0).toDouble();
 
+                        // Recuperação da quantidade em memória
                         int qtdNoCarrinho = carrinho.containsKey(docId)
-                            ? carrinho[docId]!['whitespace_padding'] =
-                                  false == false
-                                  ? carrinho[docId]!['quantidade']
-                                  : 0
+                            ? carrinho[docId]!['quantidade']
                             : 0;
 
                         return CustomOrderItem(
@@ -261,7 +264,6 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                           onIncrement: () {
                             setState(() {
                               if (carrinho.containsKey(docId)) {
-                                carrinho[docId]!['whitespace_padding'] = false;
                                 carrinho[docId]!['quantidade']++;
                               } else {
                                 carrinho[docId] = {
@@ -275,8 +277,6 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
                           onDecrement: () {
                             setState(() {
                               if (carrinho.containsKey(docId) &&
-                                  carrinho[docId]!['whitespace_padding'] ==
-                                      false &&
                                   carrinho[docId]!['quantidade'] > 0) {
                                 carrinho[docId]!['quantidade']--;
                                 if (carrinho[docId]!['quantidade'] == 0) {
@@ -294,7 +294,7 @@ class _NewOrderScreenState extends State<NewOrderScreen> {
             ],
           ),
 
-          // ABA FLUTUANTE INFERIOR
+          // Componente fixo inferior para controle e submissão do formulário de pedido
           Positioned(
             left: 0,
             right: 0,

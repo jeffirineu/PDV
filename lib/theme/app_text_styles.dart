@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'app_colors.dart'; // Importamos as cores para usar nos textos
+import 'app_colors.dart'; // Importação do catálogo de cores para estruturação tipográfica
 
 class AppTextStyles {
-  // Construtor privado para proteção
+  // Construtor privado para impedir a instanciação desta classe utilitária
   AppTextStyles._();
 
-  // --- TÍTULOS GIGANTES ---
-  // Usado para: Valor Total na tela de pagamento, Número da mesa no grid
+  // ==========================================
+  // TIPOGRAFIA DE EXIBIÇÃO (DISPLAY)
+  // Utilizada para métricas e componentes de alta hierarquia visual
+  // ==========================================
   static const TextStyle display = TextStyle(
     fontSize: 40.0,
     fontWeight: FontWeight.bold,
@@ -19,24 +21,30 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
-  // --- TÍTULOS E CABEÇALHOS ---
-  // Usado para: AppBar, Títulos de Pop-ups (ex: "EXCLUIR PRODUTO?")
+  // ==========================================
+  // TIPOGRAFIA DE CABEÇALHOS (TITLE)
+  // Utilizada para barras de navegação e títulos de componentes modais
+  // ==========================================
   static const TextStyle title = TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
 
-  // --- BOTÕES E DESTAQUES ---
-  // Usado para: Textos dentro dos botões (CONFIRMAR, CANCELAR) e nomes de produtos
+  // ==========================================
+  // TIPOGRAFIA DE AÇÃO E ÊNFASE (BUTTON/LABEL)
+  // Utilizada em controles interativos e identificação nominal de entidades
+  // ==========================================
   static const TextStyle buttonText = TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
 
-  // --- TEXTO CORRIDO (CORPO) ---
-  // Usado para: Textos explicativos, descrições secundárias
+  // ==========================================
+  // TIPOGRAFIA DE CORPO (BODY)
+  // Utilizada para estruturação de blocos informativos e metadados
+  // ==========================================
   static const TextStyle body = TextStyle(
     fontSize: 14.0,
     fontWeight: FontWeight.normal,
@@ -49,8 +57,10 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
-  // --- TEXTOS PEQUENOS (LEGENDAS) ---
-  // Usado para: "Livre" ou "Ocupada" debaixo da mesa, ícones pequenos
+  // ==========================================
+  // TIPOGRAFIA AUXILIAR (CAPTION)
+  // Utilizada para legendas contextuais, badges e indicadores de status
+  // ==========================================
   static const TextStyle caption = TextStyle(
     fontSize: 12.0,
     fontWeight: FontWeight.bold,

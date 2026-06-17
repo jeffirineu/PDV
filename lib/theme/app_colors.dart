@@ -1,39 +1,50 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Construtor privado para evitar que a classe seja instanciada sem querer
+  // Construtor privado para impedir a instanciação desta classe utilitária
   AppColors._();
 
-  // --- CORES PRINCIPAIS ---
+  // ==========================================
+  // CORES PRIMÁRIAS E DE FUNDO
+  // ==========================================
   static const Color primary = Colors.blueAccent;
-  static const Color primaryLight = Color(
-    0xFFF0F6FF,
-  ); // Fundo azul lavado do botão pressionado
+  
+  // Tonalidade clara para estados de interação e seleção
+  static const Color primaryLight = Color(0xFFF0F6FF); 
+  
   static const Color background = Colors.white;
 
-  // --- CORES DE AÇÃO E STATUS ---
-  static const Color success = Color(
-    0xFF00E676,
-  ); // Verde de Confirmar e Mesa Livre
-  static const Color danger =
-      Colors.redAccent; // Vermelho de Cancelar, Excluir e Mesa Ocupada
-  static const Color warning =
-      Colors.amber; // Amarelo da interrogação do pop-up
+  // ==========================================
+  // CORES DE SEMÂNTICA E STATUS
+  // ==========================================
+  
+  // Indicador de sucesso e disponibilidade estrutural
+  static const Color success = Color(0xFF00E676); 
+  
+  // Indicador de alerta crítico, cancelamento e indisponibilidade
+  static const Color danger = Colors.redAccent; 
+  
+  // Indicador de aviso e requisições pendentes
+  static const Color warning = Colors.amber; 
 
-  // --- TEXTOS ---
+  // ==========================================
+  // TIPOGRAFIA
+  // ==========================================
   static const Color textPrimary = Colors.black;
-  static const Color textSecondary =
-      Colors.grey; // Textos de apoio e subtítulos
+  
+  // Cor aplicada a elementos textuais auxiliares e legendas
+  static const Color textSecondary = Colors.grey; 
 
-  // --- BORDAS E SOMBRAS (Efeito 3D/Neomorfismo) ---
-  static const Color borderLight = Color.fromARGB(
-    255,
-    215,
-    215,
-    215,
-  ); // Cinza claro padrão
-  static const Color shadowLight =
-      Colors.black12; // Sombra externa suave (12% de opacidade)
-  static const Color shadowDark =
-      Colors.black; // Usado com opacidade na sombra interna
+  // ==========================================
+  // BORDAS E EFEITOS DE PROFUNDIDADE
+  // ==========================================
+  
+  // Valoração padrão para delimitadores e contornos estruturais
+  static const Color borderLight = Color.fromARGB(255, 215, 215, 215); 
+  
+  // Projeção de sombra de baixa densidade (12% de opacidade fixa)
+  static const Color shadowLight = Colors.black12; 
+  
+  // Base de sombreamento para aplicação dinâmica de opacidade
+  static const Color shadowDark = Colors.black; 
 }

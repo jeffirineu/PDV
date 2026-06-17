@@ -6,6 +6,7 @@ import 'custom_bottom_button.dart';
 class ManageItemDialog extends StatefulWidget {
   final String itemName;
   final int initialQuantity;
+  // Callbacks para delegação de eventos de manipulação da entidade
   final VoidCallback onDelete;
   final VoidCallback onPay;
 
@@ -22,6 +23,7 @@ class ManageItemDialog extends StatefulWidget {
 }
 
 class _ManageItemDialogState extends State<ManageItemDialog> {
+  // Controladores de estado local para gestão quantitativa
   late TextEditingController _qtdController;
   late int _currentQuantity;
 
@@ -29,16 +31,18 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
   void initState() {
     super.initState();
     _currentQuantity = widget.initialQuantity;
-    // Inicializa o controlador com a quantidade atual recebida
+    // Inicialização do controlador de texto com o estado numérico injetado
     _qtdController = TextEditingController(text: _currentQuantity.toString());
   }
 
   @override
   void dispose() {
+    // Desalocação de recursos em memória para evitar vazamentos (memory leaks)
     _qtdController.dispose();
     super.dispose();
   }
 
+  // Mutação de estado progressiva
   void _increment() {
     setState(() {
       _currentQuantity++;
@@ -46,6 +50,7 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
     });
   }
 
+  // Mutação de estado regressiva com trava de limite inferior estrito
   void _decrement() {
     if (_currentQuantity > 1) {
       setState(() {
@@ -57,6 +62,7 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
 
   @override
   Widget build(BuildContext context) {
+    // Base estrutural do componente modal flutuante
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24.0),
@@ -66,9 +72,10 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Ajusta o tamanho da coluna ao conteúdo
+          // Contração do eixo principal para adaptação dinâmica ao conteúdo (Wrap Content)
+          mainAxisSize: MainAxisSize.min, 
           children: [
-            // Título do modal
+            // Cabeçalho tipográfico de instrução de contexto
             Text(
               'O que deseja fazer?',
               style: TextStyle(
@@ -80,7 +87,7 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
             ),
             const SizedBox(height: 24.0),
 
-            // Imagem representativa do item
+            // Placeholder estrutural para representação gráfica do item (Thumbnail)
             Container(
               width: 100.0,
               height: 100.0,
@@ -93,7 +100,7 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
             ),
             const SizedBox(height: 16.0),
 
-            // Exibição do nome do item passado por parâmetro
+            // Rótulo textual referenciando a entidade injetada via parâmetro
             Text(
               widget.itemName,
               style: const TextStyle(
@@ -105,14 +112,14 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
             ),
             const SizedBox(height: 24.0),
 
-            // Controles de quantidade (decremento, campo de texto, incremento)
+            // Painel de controle interativo para manipulação do estado quantitativo
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildActionSquare(Icons.remove, AppColors.danger, _decrement),
                 const SizedBox(width: 16.0),
 
-                // Campo de entrada manual da quantidade
+                // Componente de entrada bidirecional (Manual Input/Display)
                 SizedBox(
                   width: 80.0,
                   child: TextField(
@@ -120,7 +127,8 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly, // Limita a entrada apenas para caracteres numéricos
+                      // Filtro de validação de entrada estrita para caracteres numéricos
+                      FilteringTextInputFormatter.digitsOnly, 
                     ],
                     style: const TextStyle(
                       fontSize: 24.0,
@@ -146,6 +154,7 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
                       ),
                     ),
                     onChanged: (value) {
+                      // Sincronização do estado em tempo real durante a digitação
                       if (value.isNotEmpty) {
                         _currentQuantity = int.parse(value);
                       }
@@ -159,7 +168,7 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
             ),
             const SizedBox(height: 32.0),
 
-            // Botões de ação principal
+            // Painel de submissão de ações de fechamento de ciclo (Exclusão/Pagamento)
             Row(
               children: [
                 Expanded(
@@ -189,7 +198,7 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
     );
   }
 
-  // Método auxiliar para construir os botões de incremento e decremento
+  // Componente utilitário de composição visual para os controles de incremento e decremento
   Widget _buildActionSquare(IconData icon, Color color, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
@@ -197,7 +206,8 @@ class _ManageItemDialogState extends State<ManageItemDialog> {
         width: 48.0,
         height: 48.0,
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1), // Atualizado para evitar o uso de withOpacity depreciado
+          // Definição de opacidade aderente às especificações recentes do framework
+          color: color.withValues(alpha: 0.1), 
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(color: color, width: 2.0),
         ),

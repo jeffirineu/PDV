@@ -7,12 +7,12 @@ import '../utils/payment_logic.dart';
 
 class PaymentScreen extends StatefulWidget {
   final double totalConta;
-  final int numeroDaMesa; // Esta variável precisa estar declarada aqui
+  final int numeroDaMesa;
 
   const PaymentScreen({
     super.key,
     required this.totalConta,
-    required this.numeroDaMesa, // E incluída aqui no construtor
+    required this.numeroDaMesa,
   });
 
   @override
@@ -22,10 +22,11 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   String metodoSelecionado = '';
 
-  // Valores para o resumo (Em um sistema real, viriam do Firebase)
+  // Variáveis de estado para o resumo financeiro (integração futura com Firestore)
   final double valorItensPagos = 0.0;
   final double valorCancelado = 0.0;
 
+  // Rotina de exibição do modal de cálculo de troco para pagamentos em espécie
   void _abrirCalculadoraTroco(double valorTotal) {
     double valorRecebido = 0.0;
     TextEditingController valorController = TextEditingController();
@@ -76,7 +77,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         setDialogState(() {
                           valorRecebido =
                               double.tryParse(value.replaceAll(',', '.')) ??
-                              0.0;
+                                  0.0;
                         });
                       },
                       style: const TextStyle(
@@ -102,8 +103,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: troco > 0
-                            ? AppColors.success.withOpacity(0.1)
-                            : Colors.grey.withOpacity(0.1),
+                            ? AppColors.success.withValues(alpha: 0.1)
+                            : Colors.grey.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: Row(
@@ -153,6 +154,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
+  // Componente construtor das opções de método de pagamento
   Widget _buildPaymentOption(IconData icon, String title, Color color) {
     bool isSelected = metodoSelecionado == title;
     return GestureDetector(
@@ -160,10 +162,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.1) : Colors.white,
+          color: isSelected ? color.withValues(alpha: 0.1) : Colors.white,
           borderRadius: BorderRadius.circular(16.0),
           border: Border.all(
-            color: isSelected ? color : Colors.grey.withOpacity(0.3),
+            color: isSelected ? color : Colors.grey.withValues(alpha: 0.3),
             width: 2.0,
           ),
         ),
@@ -188,7 +190,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Calculamos o total baseado no que veio da mesa
     double valorTotal = widget.totalConta;
 
     return Scaffold(
@@ -199,13 +200,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Painel de exibição do valor total a ser pago
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.05),
+                color: AppColors.primary.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: AppColors.primary.withOpacity(0.2),
+                  color: AppColors.primary.withValues(alpha: 0.2),
                   width: 2,
                 ),
               ),
@@ -238,12 +240,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
             const SizedBox(height: 40),
+            
+            // Seção de seleção de métodos de pagamento
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.account_balance_wallet,
-                  color: Colors.grey.withOpacity(0.6),
+                  color: Colors.grey.withValues(alpha: 0.6),
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -251,7 +255,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.withOpacity(0.6),
+                    color: Colors.grey.withValues(alpha: 0.6),
                     letterSpacing: 1.0,
                   ),
                 ),
@@ -277,8 +281,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ],
             ),
             const SizedBox(height: 32),
-            Divider(color: Colors.grey.withOpacity(0.2), thickness: 2.0),
+            Divider(color: Colors.grey.withValues(alpha: 0.2), thickness: 2.0),
             const SizedBox(height: 24),
+            
+            // Seção de resumo financeiro da composição da conta
             const Text(
               'Composição da Conta',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

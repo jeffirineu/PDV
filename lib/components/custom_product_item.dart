@@ -5,6 +5,7 @@ class CustomProductItem extends StatelessWidget {
   final String title;
   final String price;
   final String category;
+  // Callbacks para manipulação do estado da entidade
   final VoidCallback onDelete;
   final VoidCallback onEdit;
 
@@ -22,18 +23,16 @@ class CustomProductItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12.0),
       decoration: BoxDecoration(
-        color: const Color(0xFFFAF9F6), // Off-white
+        color: const Color(0xFFFAF9F6), 
         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
-          color: Colors.lightBlueAccent.withOpacity(
-            0.2,
-          ), // Bordas azuladas claras
+          color: Colors.lightBlueAccent.withValues(alpha: 0.2),
           width: 1.5,
         ),
       ),
       child: Row(
         children: [
-          // 1. IMAGEM DO PRODUTO (90x90)
+          // Container para exibição da imagem do produto (Placeholder de 90x90)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -47,7 +46,7 @@ class CustomProductItem extends StatelessWidget {
             ),
           ),
 
-          // 2. TEXTOS (Título, Valor e Categoria sutil abaixo)
+          // Bloco de informações textuais (Identificação, Precificação e Classificação)
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -76,7 +75,7 @@ class CustomProductItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4.0),
-                  // Categoria exibida de forma sutil abaixo do valor
+                  // Renderização do metadado de classificação (Categoria)
                   Text(
                     category.toUpperCase(),
                     style: TextStyle(
@@ -90,13 +89,13 @@ class CustomProductItem extends StatelessWidget {
             ),
           ),
 
-          // 3. BOTÕES DE AÇÃO (Lixeira e Editar empilhados)
+          // Painel de controles de gerenciamento (Ações de Exclusão e Edição em empilhamento vertical)
           Padding(
             padding: const EdgeInsets.only(right: 12.0, top: 8.0, bottom: 8.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Botão de Excluir (Vermelho)
+                // Ação destrutiva (Exclusão)
                 GestureDetector(
                   onTap: onDelete,
                   child: Container(
@@ -106,8 +105,8 @@ class CustomProductItem extends StatelessWidget {
                       color: Colors.red,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Column(
-                      children: const [
+                    child: const Column(
+                      children: [
                         Icon(Icons.delete, color: Colors.white, size: 16.0),
                         SizedBox(height: 2.0),
                         Text(
@@ -123,8 +122,9 @@ class CustomProductItem extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 8.0), // Espaçamento entre os dois botões
-                // Botão de Editar (Azul do tema)
+                const SizedBox(height: 8.0), 
+                
+                // Ação de retificação (Edição)
                 GestureDetector(
                   onTap: onEdit,
                   child: Container(
@@ -134,8 +134,8 @@ class CustomProductItem extends StatelessWidget {
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Column(
-                      children: const [
+                    child: const Column(
+                      children: [
                         Icon(Icons.edit, color: Colors.white, size: 16.0),
                         SizedBox(height: 2.0),
                         Text(

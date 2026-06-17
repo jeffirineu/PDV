@@ -6,7 +6,7 @@ import '../components/custom_category_bar.dart';
 import '../components/custom_search_bar.dart';
 import '../components/unified_item_card.dart';
 
-// O "hide" obriga o Flutter a ignorar a cópia duplicada que está vindo por engano daqui!
+// Oculta a referência para evitar ambiguidade de nomenclatura no escopo de importação
 import '../components/manage_item_dialog.dart' hide UnifiedItemCard;
 
 import 'new_order_screen.dart';
@@ -50,7 +50,6 @@ class _TableDetailsScreenState extends State<TableDetailsScreen> {
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
-                // Corrigido o aviso azul do withOpacity!
                 color: Colors.black.withValues(alpha: 0.3),
                 letterSpacing: 0.5,
               ),
@@ -115,7 +114,7 @@ class _TableDetailsScreenState extends State<TableDetailsScreen> {
                     String nome = dados['nome'] ?? 'Produto';
                     int quantidade = dados['quantidade'] ?? 1;
 
-                    // Lógica para categoria "----"
+                    // Tratamento de consistência visual para categorias ausentes
                     String categoriaRaw = dados['categoria'] ?? '';
                     String categoriaDisplay = (categoriaRaw.isEmpty)
                         ? '-----'

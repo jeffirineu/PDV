@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../theme/app_colors.dart';
 import '../components/custom_app_bar.dart';
 import '../components/custom_bottom_button.dart';
-import '../utils/category_dialog_utils.dart'; // O IMPORT DA NOSSA FAXINA AQUI!
+import '../utils/category_dialog_utils.dart'; // Importação do utilitário de diálogo para categorias
 
 class NewProductScreen extends StatefulWidget {
   const NewProductScreen({super.key});
@@ -17,8 +17,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _precoController = TextEditingController();
 
-  String?
-  _categoriaSelecionada; // Começa vazio para obrigar o usuário a escolher
+  // Inicializado como nulo para forçar a validação e seleção explícita pelo usuário
+  String? _categoriaSelecionada; 
   bool _isSaving = false;
 
   @override
@@ -29,7 +29,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
   }
 
   Future<void> _salvarProdutoNoBanco() async {
-    // 1. Validação de Categoria
+    // 1. Validação de estado da categoria
     if (_categoriaSelecionada == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Por favor, selecione uma categoria.')),
@@ -37,7 +37,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
       return;
     }
 
-    // 2. Validação de Texto
+    // 2. Validação dos campos de entrada de texto
     if (_nomeController.text.isEmpty || _precoController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Preencha o nome e o preço do produto.')),
@@ -54,16 +54,17 @@ class _NewProductScreenState extends State<NewProductScreen> {
         'nome': _nomeController.text.trim(),
         'preco': preco,
         'categoria': _categoriaSelecionada,
-        // 'fotoUrl': null, // O espaço já fica preparado para a foto no futuro
+        // Atributo reservado para futura implementação de armazenamento de imagem
+        // 'fotoUrl': null, 
         'criadoEm': FieldValue.serverTimestamp(),
       });
 
       if (mounted) Navigator.pop(context);
     } catch (e) {
       setState(() => _isSaving = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Erro ao salvar: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao salvar: $e')),
+      );
     }
   }
 
@@ -79,7 +80,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ==========================================
-              // PASSO 1: CATEGORIA (Lista Horizontal Limpa)
+              // SEÇÃO 1: SELEÇÃO DE CATEGORIA
               // ==========================================
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -110,18 +111,18 @@ class _NewProductScreenState extends State<NewProductScreen> {
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                      itemCount:
-                          categorias.length + 1, // +1 para o botão de criar
+                      // Incremento de 1 no tamanho da lista para alocar o botão de criação
+                      itemCount: categorias.length + 1, 
                       itemBuilder: (context, index) {
-                        // O Botão de "Nova Categoria" no final da lista
+                        
+                        // Renderização do botão de adição de nova categoria na última posição
                         if (index == categorias.length) {
                           return GestureDetector(
                             onTap: () {
-                              // Chamando a nossa utilidade que criamos!
                               CategoryDialogUtils.mostrarDialogCategoria(
                                 context,
                                 onSaved: (nomeSalvo) {
-                                  // Seleciona automaticamente a categoria nova
+                                  // Atualiza o estado com a categoria recém-criada
                                   setState(
                                     () => _categoriaSelecionada = nomeSalvo,
                                   );
@@ -159,9 +160,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
                           );
                         }
 
-                        // As Categorias Cadastradas
-                        var cat =
-                            categorias[index].data() as Map<String, dynamic>;
+                        // Renderização das categorias recuperadas do banco de dados
+                        var cat = categorias[index].data() as Map<String, dynamic>;
                         String nome = cat['nome'];
                         String emoji = cat['emoji'] ?? '🏷️';
                         bool isSelected = _categoriaSelecionada == nome;
@@ -174,7 +174,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
                             width: 80.0,
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? Colors.blueAccent.withOpacity(0.1)
+                                  ? Colors.blueAccent.withValues(alpha: 0.1)
                                   : Colors.white,
                               borderRadius: BorderRadius.circular(16.0),
                               border: Border.all(
@@ -225,7 +225,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
               const SizedBox(height: 32.0),
 
               // ==========================================
-              // PASSO 2: FOTO DO PRODUTO (Placeholder)
+              // SEÇÃO 2: IMAGEM DO PRODUTO (Placeholder)
               // ==========================================
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -287,7 +287,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
               const SizedBox(height: 32.0),
 
               // ==========================================
-              // PASSO 3: DETALHES (NOME E PREÇO)
+              // SEÇÃO 3: INSERÇÃO DE DADOS (NOME E PREÇO)
               // ==========================================
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -302,25 +302,19 @@ class _NewProductScreenState extends State<NewProductScreen> {
                         fontSize: 16.0,
                       ),
                     ),
-                    const SizedBox(
-                      height: 16.0,
-                    ), // Aumentei um pouco o respiro aqui
+                    const SizedBox(height: 16.0),
                     TextField(
                       controller: _nomeController,
                       style: const TextStyle(
                         fontSize: 18.0,
-                      ), // Aumentei a fonte de digitação
+                      ), 
                       decoration: _buildInputDecoration(
                         'Nome (Ex: Hambúrguer Duplo)',
                         Icons.fastfood,
                       ),
                       textCapitalization: TextCapitalization.words,
                     ),
-
-                    const SizedBox(
-                      height: 20.0,
-                    ), // Respiro maior entre os inputs
-
+                    const SizedBox(height: 20.0),
                     TextField(
                       controller: _precoController,
                       keyboardType: const TextInputType.numberWithOptions(
@@ -332,7 +326,7 @@ class _NewProductScreenState extends State<NewProductScreen> {
                         ),
                       ],
                       style: const TextStyle(
-                        fontSize: 22.0, // Fonte um pouco maior para o preço
+                        fontSize: 22.0, 
                         fontWeight: FontWeight.w900,
                         color: AppColors.primary,
                       ),
@@ -367,22 +361,22 @@ class _NewProductScreenState extends State<NewProductScreen> {
     );
   }
 
-  // --- O SEGREDO ESTÁ AQUI NO CONTENT PADDING E HINT STYLE ---
+  // Método utilitário para padronização da estilização dos campos de texto
   InputDecoration _buildInputDecoration(String hint, IconData icon) =>
       InputDecoration(
         hintText: hint,
         hintStyle: TextStyle(
-          color: Colors.grey.shade400, // Cinza bem suave
+          color: Colors.grey.shade400, 
           fontSize: 16.0,
         ),
         prefixIcon: Icon(
           icon,
           color: Colors.grey.shade400,
-        ), // Deixei o ícone combinando com o cinza suave
+        ),
         filled: true,
         fillColor: Colors.grey[50],
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 24.0, // <-- AUMENTOU A ALTURA DO CAMPO AQUI
+          vertical: 24.0, 
           horizontal: 20.0,
         ),
         border: OutlineInputBorder(

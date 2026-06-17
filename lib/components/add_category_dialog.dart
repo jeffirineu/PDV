@@ -15,17 +15,16 @@ class AddCategoryDialog extends StatelessWidget {
         ),
       ),
       content: Column(
-        mainAxisSize:
-            MainAxisSize.min, // Faz o pop-up abraçar o conteúdo sem esticar
+        mainAxisSize: MainAxisSize.min, // Restringe a dimensão vertical ao tamanho estrito do conteúdo
         children: [
-          // Botão de Foto
+          // Componente visual reservado para a inserção de imagem
           Container(
             width: 100.0,
             height: 100.0,
             decoration: BoxDecoration(
               color: Colors.grey[200],
               borderRadius: BorderRadius.circular(12.0),
-              border: Border.all(color: Colors.grey.withOpacity(0.5)),
+              border: Border.all(color: Colors.grey.withValues(alpha: 0.5)),
             ),
             child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -45,12 +44,12 @@ class AddCategoryDialog extends StatelessWidget {
           ),
           const SizedBox(height: 16.0),
 
-          // Campo de Texto do Nome
+          // Campo de entrada de dados para a nomenclatura da categoria
           TextField(
             decoration: InputDecoration(
               hintText: 'NOME DA CATEGORIA',
               hintStyle: TextStyle(
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.grey.withValues(alpha: 0.5),
                 fontSize: 14.0,
               ),
               filled: true,
@@ -66,7 +65,7 @@ class AddCategoryDialog extends StatelessWidget {
       actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context), // Fecha o pop-up
+          onPressed: () => Navigator.pop(context), // Remove a instância do modal da pilha de navegação
           child: const Text(
             'CANCELAR',
             style: TextStyle(
@@ -83,8 +82,9 @@ class AddCategoryDialog extends StatelessWidget {
             ),
           ),
           onPressed: () {
+            // Rotina temporária de confirmação de persistência
             print("Categoria salva!");
-            Navigator.pop(context); // Fecha o pop-up
+            Navigator.pop(context); // Finaliza o fluxo e fecha o modal
           },
           child: const Text(
             'SALVAR',

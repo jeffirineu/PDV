@@ -5,14 +5,16 @@ import '../theme/app_text_styles.dart';
 class CustomSearchBar extends StatelessWidget {
   final String hintText;
   final Function(String) onChanged;
-  final TextInputType keyboardType; // Adicionamos esta propriedade
+  
+  // Definição estrutural do tipo de teclado para adequação do input de dados
+  final TextInputType keyboardType; 
 
   const CustomSearchBar({
     super.key,
     this.hintText = 'Buscar...',
     required this.onChanged,
-    this.keyboardType =
-        TextInputType.number, // Padrão é numérico para sua busca de mesa
+    // Valor padrão (number) otimizado para o escopo principal de busca por identificador de mesa
+    this.keyboardType = TextInputType.number, 
   });
 
   @override
@@ -33,8 +35,8 @@ class CustomSearchBar extends StatelessWidget {
       child: TextField(
         onChanged: onChanged,
         style: AppTextStyles.bodyBold,
-        keyboardType:
-            keyboardType, // Agora ele usa o que você definir ao chamar
+        // Injeção de dependência para adaptação dinâmica do teclado virtual
+        keyboardType: keyboardType, 
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: AppTextStyles.body,

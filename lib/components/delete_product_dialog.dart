@@ -5,12 +5,12 @@ class DeleteProductDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // O Dialog puro permite que a gente desenhe exatamente o retângulo vertical que você pediu
+    // A utilização do widget Dialog base permite a customização irrestrita das proporções do modal
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.0)),
       elevation: 0,
-      backgroundColor: Colors
-          .transparent, // Deixa o fundo transparente para desenharmos nosso próprio container
+      // Fundo transparente necessário para a aplicação de estilização customizada no container interno
+      backgroundColor: Colors.transparent, 
       child: _buildDialogContent(context),
     );
   }
@@ -31,10 +31,10 @@ class DeleteProductDialog extends StatelessWidget {
         ],
       ),
       child: Column(
-        mainAxisSize: MainAxisSize
-            .min, // Faz o container abraçar o conteúdo (Retângulo vertical)
+        // Restringe a dimensão do eixo principal para ajustar-se dinamicamente ao conteúdo filho
+        mainAxisSize: MainAxisSize.min, 
         children: [
-          // 1. Composição de Ícones (Lixeira vermelha + Interrogação Amarela)
+          // 1. Composição visual indicativa de ação destrutiva (Alerta)
           Stack(
             alignment: Alignment.bottomRight,
             children: [
@@ -49,7 +49,7 @@ class DeleteProductDialog extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
-                  Icons.help, // Ícone de interrogação
+                  Icons.help, // Indicador secundário de confirmação de estado
                   color: Colors.amber,
                   size: 36.0,
                 ),
@@ -58,7 +58,7 @@ class DeleteProductDialog extends StatelessWidget {
           ),
           const SizedBox(height: 16.0),
 
-          // 2. Título Vermelho Chamativo
+          // 2. Cabeçalho tipográfico de confirmação da operação
           const Text(
             'EXCLUIR PRODUTO?',
             textAlign: TextAlign.center,
@@ -76,17 +76,17 @@ class DeleteProductDialog extends StatelessWidget {
           ),
           const SizedBox(height: 24.0),
 
-          // 3. Resumo do Item (Foto + Nome do Produto)
+          // 3. Container de sumarização da entidade alvo da exclusão
           Container(
             padding: const EdgeInsets.all(12.0),
             decoration: BoxDecoration(
               color: Colors.grey[100],
               borderRadius: BorderRadius.circular(16.0),
-              border: Border.all(color: Colors.grey.withOpacity(0.3)),
+              border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
-                // Foto Simulada do Item
+                // Placeholder estrutural para a imagem representativa da entidade
                 Container(
                   width: 56.0,
                   height: 56.0,
@@ -95,14 +95,15 @@ class DeleteProductDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                     image: const DecorationImage(
                       image: NetworkImage(
-                        'https://picsum.photos/100',
-                      ), // Placeholder de imagem
+                        'https://picsum.photos/100', // Mock de imagem para prototipação
+                      ), 
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 const SizedBox(width: 16.0),
-                // Nome Simulada do Item
+                
+                // Rótulo textual de identificação da entidade
                 const Expanded(
                   child: Text(
                     'Hambúrguer Artesanal',
@@ -118,10 +119,10 @@ class DeleteProductDialog extends StatelessWidget {
           ),
           const SizedBox(height: 32.0),
 
-          // 4. Botões NÃO (Vermelho) e SIM (Verde)
+          // 4. Painel de ações binárias (Confirmação/Cancelamento)
           Row(
             children: [
-              // Botão NÃO (X Vermelho)
+              // Ação de cancelamento e fechamento (Dismiss) do modal
               Expanded(
                 child: SizedBox(
                   height: 50.0,
@@ -135,8 +136,7 @@ class DeleteProductDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                     ),
-                    onPressed: () =>
-                        Navigator.pop(context), // Apenas fecha o pop-up
+                    onPressed: () => Navigator.pop(context), // Desempilha a rota atual do navegador
                     icon: const Icon(
                       Icons.close,
                       color: Colors.redAccent,
@@ -154,7 +154,7 @@ class DeleteProductDialog extends StatelessWidget {
               ),
               const SizedBox(width: 16.0),
 
-              // Botão SIM (V Verde)
+              // Ação de confirmação (Commit) da operação destrutiva
               Expanded(
                 child: SizedBox(
                   height: 50.0,
@@ -168,7 +168,7 @@ class DeleteProductDialog extends StatelessWidget {
                     ),
                     onPressed: () {
                       print("Produto Excluído com sucesso!");
-                      Navigator.pop(context); // Fecha o pop-up após a ação
+                      Navigator.pop(context); // Remove o modal da pilha após execução do processamento
                     },
                     icon: const Icon(
                       Icons.check,

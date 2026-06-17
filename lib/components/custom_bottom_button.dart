@@ -23,7 +23,7 @@ class CustomBottomButton extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.4),
+            color: color.withValues(alpha: 0.4),
             blurRadius: 8.0,
             offset: const Offset(0, 4),
           ),
@@ -41,15 +41,20 @@ class CustomBottomButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Indicador visual ícone contido em elemento circular
             CircleAvatar(
               radius: 12.0,
               backgroundColor: Colors.white,
               child: Icon(icon, color: color, size: 16.0),
             ),
             const SizedBox(width: 8.0),
+            // Rótulo de texto do botão
             Text(
               label,
-              style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: textColor, 
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),

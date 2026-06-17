@@ -4,6 +4,7 @@ import 'custom_bottom_button.dart';
 
 class OrderSummary extends StatefulWidget {
   final int totalItems;
+  // Callbacks para delegação de eventos de ciclo de vida do pedido
   final VoidCallback onCancel;
   final VoidCallback onConfirm;
 
@@ -19,10 +20,12 @@ class OrderSummary extends StatefulWidget {
 }
 
 class _OrderSummaryState extends State<OrderSummary> {
+  // Controle de estado de layout (Recolhido/Expandido)
   bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
+    // Cálculo de dimensões reativas baseadas na altura segura da tela (Viewport)
     final screenHeight = MediaQuery.of(context).size.height;
     final double expandedHeight = screenHeight * 0.80;
     const double collapsedHeight = 180.0;
@@ -37,9 +40,8 @@ class _OrderSummaryState extends State<OrderSummary> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(
-              0.08,
-            ), // Sombra mais suave e elegante
+            // Definição de sombra estrutural com transparência alfa padronizada
+            color: Colors.black.withValues(alpha: 0.08), 
             blurRadius: 20.0,
             offset: const Offset(0, -6),
           ),
@@ -48,7 +50,7 @@ class _OrderSummaryState extends State<OrderSummary> {
       child: SafeArea(
         child: Column(
           children: [
-            // Área superior interativa (Gatilho para expandir)
+            // Área de captura de gestos (Hitbox) para manipulação de estado do contêiner
             GestureDetector(
               onTap: () => setState(() => _isExpanded = !_isExpanded),
               child: Container(
@@ -59,10 +61,10 @@ class _OrderSummaryState extends State<OrderSummary> {
               ),
             ),
 
-            // Lista de Itens (Expansível)
+            // Região de renderização de conteúdo condicional (Lista de artefatos)
             _buildItemList(),
 
-            // Barra de Ações Fixa na Base
+            // Painel inferior de ancoragem de controles de navegação e conversão
             _buildActionButtons(),
           ],
         ),
@@ -70,9 +72,7 @@ class _OrderSummaryState extends State<OrderSummary> {
     );
   }
 
-  // --- MÉTODOS REFATORADOS (CLEAN CODE) ---
-
-  // 1. O pequeno traço indicador de arraste
+  // Componente visual indicativo de arrasto (Drag handle) para affordance da interface
   Widget _buildDragHandle(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Padding(
@@ -81,18 +81,17 @@ class _OrderSummaryState extends State<OrderSummary> {
         width: screenWidth * 0.60,
         height: 4.0,
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.2), // Mais discreto
+          color: Colors.grey.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(10.0),
         ),
       ),
     );
   }
 
-  // 2. Cabeçalho Corrigido (Unificado, Profissional e sem tons berrantes)
+  // Construção do cabeçalho descritivo com sumarização de métricas
   Widget _buildHeader() {
     return Container(
       padding: const EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 16.0),
-      // ANCORAGEM VISUAL: Uma borda sutil na base que separa o cabeçalho do conteúdo
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.grey.shade100, width: 2.0),
@@ -104,26 +103,26 @@ class _OrderSummaryState extends State<OrderSummary> {
           Text(
             'RESUMO DO PEDIDO',
             style: TextStyle(
-              fontWeight: FontWeight.w800, // Um pouco mais robusto
-              fontSize: 18.0, // Ajustado para escala harmônica par
+              fontWeight: FontWeight.w800, 
+              fontSize: 18.0, 
               color: Colors.grey[800],
               letterSpacing: 0.5,
             ),
           ),
 
-          // CONTADOR MUTED: Elegante, integrado e profissional
+          // Indicador de contagem encapsulado
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 12.0,
               vertical: 6.0,
             ),
             decoration: BoxDecoration(
-              color: Colors.grey[50], // Fundo neutro e limpo
+              color: Colors.grey[50], 
               borderRadius: BorderRadius.circular(20.0),
               border: Border.all(
                 color: Colors.grey.shade300,
                 width: 2.0,
-              ), // Borda fina par
+              ), 
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -137,8 +136,7 @@ class _OrderSummaryState extends State<OrderSummary> {
                 Text(
                   '${widget.totalItems} Itens',
                   style: TextStyle(
-                    fontWeight: FontWeight
-                        .bold, // Corrigido de 'widget' para 'fontWeight'
+                    fontWeight: FontWeight.bold, 
                     fontSize: 16.0,
                     color: Colors.grey[700],
                   ),
@@ -151,7 +149,7 @@ class _OrderSummaryState extends State<OrderSummary> {
     );
   }
 
-  // 3. Lista de itens interna
+  // Composição animada da lista de detalhamento do pedido
   Widget _buildItemList() {
     return Expanded(
       child: AnimatedOpacity(
@@ -168,12 +166,13 @@ class _OrderSummaryState extends State<OrderSummary> {
     );
   }
 
-  // 4. Item individual da lista de resumo
+  // Nó individual de renderização da listagem de artefatos
   Widget _buildSummaryItem() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Row(
         children: [
+          // Placeholder para imagem do artefato
           Container(
             width: 50.0,
             height: 50.0,
@@ -197,6 +196,8 @@ class _OrderSummaryState extends State<OrderSummary> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
+          
+          // Controles de mutação de quantidade do artefato
           Row(
             children: [
               _buildCounterButton(
@@ -223,7 +224,7 @@ class _OrderSummaryState extends State<OrderSummary> {
     );
   }
 
-  // Auxiliar para fabricar os botões de + e - do resumo
+  // Fábrica de botões de interação quantitativa
   Widget _buildCounterButton(IconData icon, Color color, VoidCallback onTap) {
     final isRemove = icon == Icons.remove;
     return GestureDetector(
@@ -233,7 +234,7 @@ class _OrderSummaryState extends State<OrderSummary> {
         decoration: BoxDecoration(
           color: isRemove ? Colors.white : color,
           border: isRemove
-              ? Border.all(color: color.withOpacity(0.5), width: 2.0)
+              ? Border.all(color: color.withValues(alpha: 0.5), width: 2.0)
               : null,
           borderRadius: BorderRadius.circular(6.0),
         ),
@@ -242,7 +243,7 @@ class _OrderSummaryState extends State<OrderSummary> {
     );
   }
 
-  // 5. Botões de ação inferiores
+  // Painel estático de botões estruturais (Conversão/Descarte)
   Widget _buildActionButtons() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 16.0),
@@ -260,6 +261,7 @@ class _OrderSummaryState extends State<OrderSummary> {
           const SizedBox(width: 16.0),
           Expanded(
             child: CustomBottomButton(
+              // Transição de rótulo contextual baseada no estado visual
               label: _isExpanded ? 'CONFIRMAR' : 'REVISAR',
               icon: Icons.check,
               color: AppColors.success,

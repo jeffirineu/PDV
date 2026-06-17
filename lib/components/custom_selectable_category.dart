@@ -10,13 +10,14 @@ class CustomSelectableCategory extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
-    this.isSelected = false, // Por padrão, não está selecionado
+    // Valor padrão (false) para inicializar o componente no estado inativo
+    this.isSelected = false, 
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Se estiver selecionado no futuro modo de exclusão, fica vermelho. Senão, cinza.
+    // Define a cor do item com base no estado de seleção
     final Color itemColor = isSelected ? Colors.red : Colors.grey;
 
     return GestureDetector(
@@ -29,13 +30,13 @@ class CustomSelectableCategory extends StatelessWidget {
             Icon(
               icon,
               color: itemColor,
-              size: 38.0, // Aumentado em 20%
+              size: 38.0, // Escala gráfica ajustada
             ),
             const SizedBox(height: 6.0),
             Text(
               title,
               style: TextStyle(
-                fontSize: 14.0, // Aumentado em 20%
+                fontSize: 14.0, // Escala tipográfica
                 color: itemColor,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),

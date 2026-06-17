@@ -5,7 +5,8 @@ class CustomConsumedItem extends StatelessWidget {
   final String title;
   final String price;
   final int quantity;
-  final VoidCallback onManage; // Dispara a caixa de diálogo de retificação
+  // Callback para acionamento da interface de edição/retificação do item
+  final VoidCallback onManage; 
 
   const CustomConsumedItem({
     super.key,
@@ -23,13 +24,13 @@ class CustomConsumedItem extends StatelessWidget {
         color: const Color(0xFFFAF9F6),
         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(
-          color: Colors.lightBlueAccent.withOpacity(0.2),
-          width: 2.0, // Escala par
+          color: Colors.lightBlueAccent.withValues(alpha: 0.2),
+          width: 2.0, 
         ),
       ),
       child: Row(
         children: [
-          // Foto Padronizada em 90x90
+          // Container para exibição da imagem do produto (Placeholder estrutural de 90x90)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -43,7 +44,7 @@ class CustomConsumedItem extends StatelessWidget {
             ),
           ),
 
-          // Nome e Valor Ajustados para escala par (20.0)
+          // Bloco de informações textuais (Tipografia padronizada em base par)
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -73,12 +74,12 @@ class CustomConsumedItem extends StatelessWidget {
             ),
           ),
 
-          // Bloco de Ações (Quantidade e Lápis de Gestão)
+          // Painel de métricas e ações de gerenciamento
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: Row(
               children: [
-                // Indicador de Quantidade
+                // Componente visualizador da quantidade consumida
                 Container(
                   height: 40.0,
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -111,13 +112,13 @@ class CustomConsumedItem extends StatelessWidget {
                 ),
                 const SizedBox(width: 8.0),
 
-                // ÍCONE DO LÁPIS (Acessibilidade para alteração/retificação)
+                // Botão de ação (Trigger) para edição e controle do item
                 Container(
                   height: 40.0,
                   width: 40.0,
                   decoration: BoxDecoration(
-                    color: Colors
-                        .blueGrey[600], // Cor neutra que indica gerenciamento
+                    // Tonalidade de contraste reservada para ações secundárias/gestão
+                    color: Colors.blueGrey[600], 
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: IconButton(
@@ -127,7 +128,7 @@ class CustomConsumedItem extends StatelessWidget {
                       color: Colors.white,
                       size: 20.0,
                     ),
-                    onPressed: onManage, // Abre o pop-up
+                    onPressed: onManage, 
                   ),
                 ),
               ],

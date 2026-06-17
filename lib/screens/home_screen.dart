@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = false;
 
-  // --- BOTÃO DE EMERGÊNCIA: FORÇA A CRIAÇÃO E MOSTRA O ERRO ---
+  // Rotina de inicialização em lote para popular a coleção "mesas" no Firestore
   Future<void> _forcarCriacaoDasMesas() async {
     setState(() => _isLoading = true);
 
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       if (mounted) {
-        // Se der erro de permissão do Firebase, ele vai aparecer aqui!
+        // Tratamento e exibição de exceções de integridade ou permissão do banco de dados
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('🚨 ERRO NO FIREBASE: $e'),
@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           CustomSearchBar(
             onChanged: (valorDigitado) {
+              // Registro de depuração da entrada de pesquisa
               print("Pesquisando mesa: $valorDigitado");
             },
           ),
@@ -91,9 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
-                // ==========================================
-                // SE O BANCO TIVER VAZIO, MOSTRA O BOTÃO DE EMERGÊNCIA
-                // ==========================================
+                // Renderização condicional para base de dados vazia (Estado de Inicialização)
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(
                     child: Column(
@@ -142,9 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }
 
-                // ==========================================
-                // SUCESSO! RENDERIZA AS MESAS
-                // ==========================================
+                // Renderização da grade de mesas com base no estado recuperado
                 var mesasDoBanco = snapshot.data!.docs;
 
                 return GridView.builder(
@@ -165,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       tableNumber: numeroDaMesa,
                       isOccupied: isOcupada,
                       onTap: () {
+                        // Direcionamento do fluxo de navegação baseado no estado de ocupação
                         if (isOcupada) {
                           Navigator.push(
                             context,

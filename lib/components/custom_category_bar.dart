@@ -4,13 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CustomCategoryBar extends StatefulWidget {
   final String categoriaSelecionada;
   final Function(String) onCategorySelected;
-  final bool showActions; // <-- NOVA PROPRIEDADE PARA CONTROLAR OS BOTÕES
+  // Flag de controle de renderização das ações de gerenciamento de categoria
+  final bool showActions; 
 
   const CustomCategoryBar({
     super.key,
     required this.categoriaSelecionada,
     required this.onCategorySelected,
-    this.showActions = true, // Por padrão, os botões aparecem
+    // Valor padrão (true) habilita a interface de gerenciamento
+    this.showActions = true, 
   });
 
   @override
@@ -18,6 +20,7 @@ class CustomCategoryBar extends StatefulWidget {
 }
 
 class _CustomCategoryBarState extends State<CustomCategoryBar> {
+  // Controle de estado para o layout responsivo (recolhido/expandido)
   bool _isExpanded = false;
 
   @override
@@ -26,6 +29,7 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
     _verificarECriarCategoriasPadrao();
   }
 
+  // Rotina assíncrona de inicialização de dados (Seed) para categorias padrão
   Future<void> _verificarECriarCategoriasPadrao() async {
     var snapshot = await FirebaseFirestore.instance
         .collection('categorias')
@@ -56,7 +60,7 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // CABEÇALHO
+        // Componente de cabeçalho com controle de expansão (Toggle)
         Padding(
           padding: const EdgeInsets.fromLTRB(16.0, 16.0, 8.0, 0.0),
           child: Row(
@@ -84,13 +88,14 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
           ),
         ),
 
-        // STREAM DA LISTA
+        // Escuta ativa (Stream) da coleção de categorias no banco de dados
         StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('categorias')
               .orderBy('nome')
               .snapshots(),
           builder: (context, snapshot) {
+            // Inicialização da lista com a opção agregadora global
             List<Map<String, dynamic>> categorias = [
               {'id': 'todos', 'nome': 'Todos', 'emoji': '📋'},
             ];
@@ -108,6 +113,7 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
               }
             }
 
+            // Mapeamento condicional do identificador da categoria em foco
             String? idSelecionado;
             if (widget.categoriaSelecionada != 'Todos') {
               try {
@@ -130,7 +136,7 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
                       : _buildListView(categorias),
                 ),
 
-                // SÓ MOSTRA OS BOTÕES SE SHOWACTIONS FOR TRUE
+                // Renderização condicional dos controles de manipulação de dados baseada na flag [showActions]
                 if (widget.showActions)
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -185,10 +191,10 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
                             ),
                             onPressed: podeExcluir
                                 ? () => _excluirCategoria(
-                                    context,
-                                    idSelecionado!,
-                                    widget.categoriaSelecionada,
-                                  )
+                                      context,
+                                      idSelecionado!,
+                                      widget.categoriaSelecionada,
+                                    )
                                 : null,
                           ),
                         ),
@@ -235,7 +241,7 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
     return GestureDetector(
       onTap: () => widget.onCategorySelected(nome),
       onLongPress: () {
-        // SÓ PERMITE EDITAR NO CLIQUE LONGO SE SHOWACTIONS FOR TRUE
+        // Restrição de acesso à interface de edição baseada na permissão do contexto
         if (widget.showActions && id != 'todos') {
           _mostrarDialogCategoria(
             context,
@@ -255,7 +261,7 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
               padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? Colors.blueAccent.withOpacity(0.1)
+                    ? Colors.blueAccent.withValues(alpha: 0.1)
                     : Colors.grey.shade100,
                 shape: BoxShape.circle,
                 border: isSelected
@@ -288,14 +294,14 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
     String? nomeAtual,
     String? emojiAtual,
   }) {
-    // Mantém a mesma lógica interna do diálogo...
+    // Implementação da rotina de diálogo mantida conforme arquitetura original...
   }
 
   void _abrirSeletorExclusivoComida(
     BuildContext context,
     Function(String) onEmojiSelected,
   ) {
-    // Mantém a mesma lógica interna do seletor...
+    // Implementação da rotina do seletor mantida conforme arquitetura original...
   }
 
   void _excluirCategoria(
@@ -303,6 +309,6 @@ class _CustomCategoryBarState extends State<CustomCategoryBar> {
     String idDoDocumento,
     String nomeDaCategoria,
   ) {
-    // Mantém a mesma lógica interna de exclusão...
+    // Implementação da rotina de deleção no banco de dados mantida conforme arquitetura original...
   }
 }

@@ -40,9 +40,9 @@ class _MenuStockScreenState extends State<MenuStockScreen> {
             stream: categoriaSelecionada == 'Todos'
                 ? FirebaseFirestore.instance.collection('produtos').snapshots()
                 : FirebaseFirestore.instance
-                      .collection('produtos')
-                      .where('categoria', isEqualTo: categoriaSelecionada)
-                      .snapshots(),
+                    .collection('produtos')
+                    .where('categoria', isEqualTo: categoriaSelecionada)
+                    .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
@@ -62,7 +62,7 @@ class _MenuStockScreenState extends State<MenuStockScreen> {
                 itemBuilder: (context, index) {
                   final data = produtos[index].data() as Map<String, dynamic>;
 
-                  // AQUI ESTÁ A CHAMADA CORRETA COM O LAYOUT FIXO
+                  // Renderização do componente de exibição de dados com ações de manipulação de registro
                   return UnifiedItemCard(
                     title: data['nome'] ?? 'Sem nome',
                     price:

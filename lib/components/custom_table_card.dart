@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
-// import '../theme/app_text_styles.dart'; // Omitido aqui pois definimos os estilos direto no card
 
 class CustomTableCard extends StatelessWidget {
   final int tableNumber;
@@ -16,10 +15,10 @@ class CustomTableCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Fundo puxando a cor real do estado
+    // Definição da cor do card baseada no estado de ocupação (danger/success)
     final Color stateColor = isOccupied ? AppColors.danger : AppColors.success;
 
-    // Constante para o contorno suave (reaproveitada no título e no número)
+    // Lista de sombras para renderização do contorno tipográfico de legibilidade
     const List<Shadow> softOutline = [
       Shadow(offset: Offset(-1, -1), color: Colors.black38, blurRadius: 2.0),
       Shadow(offset: Offset(1, -1), color: Colors.black38, blurRadius: 2.0),
@@ -33,7 +32,7 @@ class CustomTableCard extends StatelessWidget {
         builder: (context, constraints) {
           return Container(
             decoration: BoxDecoration(
-              color: stateColor, // Fundo todo vermelho ou todo verde
+              color: stateColor,
               borderRadius: BorderRadius.circular(16.0),
               boxShadow: const [
                 BoxShadow(
@@ -45,7 +44,7 @@ class CustomTableCard extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                // 1. TÍTULO FIXADO NO TOPO (+50% de tamanho e Contorno)
+                // Identificador fixo posicionado no topo
                 const Align(
                   alignment: Alignment.topCenter,
                   child: Padding(
@@ -53,29 +52,27 @@ class CustomTableCard extends StatelessWidget {
                     child: Text(
                       'MESA',
                       style: TextStyle(
-                        fontSize:
-                            22.0, // Aumentado para 22 seguindo boas práticas
+                        fontSize: 22.0,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         letterSpacing: 1.0,
-                        shadows: softOutline, // Efeito de contorno suave
+                        shadows: softOutline,
                       ),
                     ),
                   ),
                 ),
 
-                // 2. NÚMERO FIXADO NO CENTRO ABSOLUTO (+10% de tamanho e Contorno)
+                // Valor numérico posicionado centralmente
                 Align(
                   alignment: Alignment.center,
                   child: Text(
                     '$tableNumber',
                     style: TextStyle(
-                      fontSize:
-                          constraints.maxHeight * 0.51, // Exatos 51% da altura
+                      fontSize: constraints.maxHeight * 0.51, // Escalonamento proporcional à altura
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       height: 1.0,
-                      shadows: softOutline, // Efeito de contorno suave
+                      shadows: softOutline,
                     ),
                   ),
                 ),

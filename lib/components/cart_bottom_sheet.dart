@@ -5,59 +5,53 @@ class CartBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Pegamos exatamente 70% da largura da tela do celular para a alça
+    // Define a largura do indicador de arrasto como 70% da largura da tela
     final double handleWidth = MediaQuery.of(context).size.width * 0.7;
 
     return DraggableScrollableSheet(
-      // 0.14 = 14% da altura da tela. É o tamanho exato para mostrar só a alça e a pílula de resumo
+      // Proporção inicial e mínima da folha (14% da altura da tela), exibindo apenas o cabeçalho
       initialChildSize: 0.14,
       minChildSize: 0.14,
-      // 1.0 = Pode subir até o teto (Logo abaixo da AppBar)
+      // Proporção máxima da folha (100% da altura da tela)
       maxChildSize: 1.0,
-      snap:
-          true, // Adiciona um "ímã" que ajuda a aba a abrir ou fechar de vez ao soltar
-
+      // Habilita o comportamento magnético de encaixe ao soltar a folha
+      snap: true,
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(
-                50.0,
-              ), // O arredondamento de 50 que você definiu no Figma
+              topLeft: Radius.circular(50.0),
               topRight: Radius.circular(50.0),
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.black.withValues(alpha: 0.15),
                 blurRadius: 20.0,
-                offset: const Offset(0, -5), // Sombra projetada para cima
+                offset: const Offset(0, -5), // Projeção da sombra para a área superior
               ),
             ],
           ),
-
-          // O ListView garante que arrastar a tela pra cima puxa a aba,
-          // e quando a aba chegar no topo, ele rola os itens da lista.
+          // O ListView é acoplado ao scrollController para permitir a expansão da folha e rolagem interna
           child: ListView(
             controller: scrollController,
-            // Esse fundo de 100px garante que o último item da lista não fique
-            // escondido atrás dos botões verdes e vermelhos da outra tela
+            // Preenchimento inferior inserido para evitar sobreposição da lista com componentes fixos da tela base
             padding: const EdgeInsets.only(top: 16.0, bottom: 100.0),
             children: [
-              // 1. A linha horizontal (Alça de puxar com 70% da tela)
+              // Elemento visual indicador de arrasto (Handle)
               Center(
                 child: Container(
                   width: handleWidth,
                   height: 5.0,
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.4),
+                    color: Colors.grey.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
               const SizedBox(height: 20.0),
 
-              // 2. O Retângulo com a pílula de quantidade e título
+              // Contêiner de resumo de itens selecionados
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Container(
@@ -66,17 +60,15 @@ class CartBottomSheet extends StatelessWidget {
                     vertical: 12.0,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.blueAccent.withOpacity(
-                      0.08,
-                    ), // Fundo azul bem clarinho
+                    color: Colors.blueAccent.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(
-                      color: Colors.blueAccent.withOpacity(0.3),
+                      color: Colors.blueAccent.withValues(alpha: 0.3),
                     ),
                   ),
                   child: Row(
                     children: [
-                      // A pílula interna com o número "10"
+                      // Indicador numérico de itens
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12.0,
@@ -96,7 +88,7 @@ class CartBottomSheet extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 12.0),
-                      // O Título
+                      // Rótulo descritivo do contêiner
                       const Text(
                         'itens selecionados',
                         style: TextStyle(
@@ -111,8 +103,7 @@ class CartBottomSheet extends StatelessWidget {
               ),
               const SizedBox(height: 24.0),
 
-              // 3. A Lista de Itens do Carrinho (Só aparece quando a aba é puxada para cima)
-              // Aqui estamos simulando 10 itens já adicionados para você ver o design
+              // Geração da lista de itens do carrinho com dados simulados para estruturação visual
               ...List.generate(10, (index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(
@@ -122,13 +113,13 @@ class CartBottomSheet extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(12.0),
                     decoration: BoxDecoration(
-                      color: Colors.grey[50], // Cinza quase branco
+                      color: Colors.grey[50],
                       borderRadius: BorderRadius.circular(12.0),
-                      border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                      border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
                     ),
                     child: Row(
                       children: [
-                        // Nome do item da comanda
+                        // Seção de informações textuais do item
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,16 +143,16 @@ class CartBottomSheet extends StatelessWidget {
                           ),
                         ),
 
-                        // Botões de Adicionar/Retirar do carrinho (+ e -)
+                        // Controles de manipulação de quantidade do item
                         Row(
                           children: [
                             GestureDetector(
-                              onTap: () => print("Remover 1 do carrinho"),
+                              onTap: () => print("Rotina de decremento acionada"),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   border: Border.all(
-                                    color: Colors.redAccent.withOpacity(0.5),
+                                    color: Colors.redAccent.withValues(alpha: 0.5),
                                   ),
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
@@ -176,7 +167,7 @@ class CartBottomSheet extends StatelessWidget {
                             const Padding(
                               padding: EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
-                                '1', // Quantidade daquele item específico
+                                '1', // Valor estático correspondente à quantidade atual
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
@@ -184,7 +175,7 @@ class CartBottomSheet extends StatelessWidget {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () => print("Adicionar +1 no carrinho"),
+                              onTap: () => print("Rotina de incremento acionada"),
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: Colors.blueAccent,
